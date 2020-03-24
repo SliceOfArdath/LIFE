@@ -55,8 +55,16 @@ text.to = "document.getElementById('chat').innerHTML";
 var posInChat = 0
 var chat = [
   "What is life?",
-  "What meaning does it hide?"
+  "What meaning does it hide?",
+  "This, this is what we all seek for.",
+  "This is what makes us go along.",
+  "This is...",
+  "Life."
 ]
+function effect() {
+  var audio = new Audio('typing1.mp3');
+  audio.play();
+}
 function next() {
   text.startSay(chat[posInChat]);
   posInChat++;
