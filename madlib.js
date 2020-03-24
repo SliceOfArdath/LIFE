@@ -117,9 +117,10 @@ var text = {
     letter: function (ltr) { eval(this.to + " += ltr;"); },
     pointer: 0,
     string: [],
-    startSay: function(str) { eval(this.to + " = '';"); this.pointer = 0; this.string = str.split(''); setTimeout(this.say, 1000/10); },
+    startSay: function(str) { eval(this.to + " = '';"); text.pointer = 0; text.string = str.split(''); setTimeout(say, 1000/10); },
     say: function () { if (text.string.length < text.pointer) { text.pointer++; text.letter(text.string[text.pointer]); setTimeout(this.say, 1000/10); } }
 }
+function say() { if (text.string.length > text.pointer) { text.letter(text.string[text.pointer]); text.pointer++; setTimeout(say, 1000/10); } }
 var cursor = {
     enable: false,
     x: 1,
