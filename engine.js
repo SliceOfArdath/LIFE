@@ -1,4 +1,4 @@
-var tickSpeed = 6; //in TPS
+/*var tickSpeed = 6; //in TPS
 var z = 0;
 var base = 75;
 var coreBreath = 4 + base; //in percent? per second
@@ -6,8 +6,9 @@ var x = document.getElementById("core-m").style;
 //document.getElementById("behave").innerHTML = "Changer le comportement (Actuel: " + bubble.settings.generalBehavior + ")";
 //document.getElementById("range").innerHTML = "Changer l'effet de portée (Actuel: " + bubble.settings.generalRangeEffect + ")";
 //document.getElementById("pausemenu").style.display = "none";
-bubble.settings.generalRangeEffect = -1;
+*/
 bubble.settings.generalBehavior = 0;
+bubble.settings.generalRangeEffect = -1;
 key.enable = true;
 var paused = false;
 /*function pause() {
@@ -15,6 +16,7 @@ var paused = false;
   else { document.getElementById("pausemenu").style.display = "block"; }
   toogle(paused);
 }*/
+/*
 function cpls() {
   key.enable = toogle(key.enable);
   cursor.enable = toogle(key.enable);
@@ -30,6 +32,7 @@ function cp() {
   else { bubble.settings.generalRangeEffect = -1; }
   //document.getElementById("range").innerHTML = "Changer l'effet de portée (Actuel: " + bubble.settings.generalRangeEffect + ")";
 }
+*/
 function pre() {
   if (!toc) {
     ctx.fillStyle = "#000000";
@@ -45,10 +48,10 @@ function post() {
   }
 }
 var c = document.getElementById("game")
+c.style.display = "none";
 function recalcPos() {
   c.width = document.documentElement.clientWidth;
   c.height = document.documentElement.clientHeight / 2;
-
 }
 recalcPos()
 text.to = "document.getElementById('chat').innerHTML";
@@ -62,15 +65,16 @@ var chat = [
   "/Life."
 ]
 function effect() {
-  a = rand.int(1, 2);
+  a = rand.int(1, 5);
   eval("var audio = new Audio('typing" + a + ".mp3');");
   audio.play();
 }
 function next() {
   if (chat[posInChat].substr(0, 1) == "/") {
-    startGame();
+    startGame(1, 0);
     text.startSay(chat[posInChat].substr(1, chat[posInChat].length - 1));
     posInChat++;
+    c.style.display = "block";
   } else {
     text.startSay(chat[posInChat]);
     posInChat++;
@@ -80,16 +84,19 @@ function next() {
 var ctx = c.getContext("2d");
 var timer = 1;
 var toc = false;
-ctx.fillStyle = "#FF5C79";
-ctx.fillRect(key.pos.x, key.pos.y, 6, 6);
 ctx.fillStyle = "#000000";
 ctx.fillRect(0, 0, c.width, c.height);
-console.log(c.width, c.height);
-function startGame() {
+function startGame(a, b) {
+  bubble.settings.generalBehavior = a;
+  bubble.settings.generalRangeEffect = b;
   for (let i = 0; i < 20; i++) {
-    bubble.create(rand.int(1, 100), rand.int(1, c.height), rand.real(3.5, 6.5, 2));
+    bubble.create(rand.int(1, 100), rand.int(1, c.height), rand.real(4.5, 6, 2));
   }
   key.pos.x = Math.round(c.width / 2);
+  key.pos.y = Math.round(c.height / 2);
+  load();
+  ctx.fillStyle = "#FF5C79";
+  ctx.fillRect(key.pos.x, key.pos.y, 6, 6);
   key.restrictions(0, c.width - 7, 0, c.height - 7);
   bubble.restrict(0, c.width + 30, -5, c.height);
   tick()
@@ -116,12 +123,12 @@ function tick() {
         toc = true;
       }
     }
-    if (a.x >= c.width) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(3.5, 6.5, 2)); }
-    if (bubble.settings.restrictions.xMin >= a.x || bubble.settings.restrictions.xMax <= a.x) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(3.5, 6.5, 2)); }
-    if (bubble.settings.restrictions.yMin >= a.y || bubble.settings.restrictions.yMax <= a.y) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(3.5, 6.5, 2)); }
-    if (a.speed >= 3.5 && a.speed <= 6.5) {
-      var propSpd = getMix(3.5, 6.5, a.speed);
-      var hexspd = (Math.round(mix(200, 255, propSpd))).toString(16);
+    if (a.x >= c.width) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(4.5, 6, 2)); }
+    if (bubble.settings.restrictions.xMin >= a.x || bubble.settings.restrictions.xMax <= a.x) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(4.5, 6, 2)); }
+    if (bubble.settings.restrictions.yMin >= a.y || bubble.settings.restrictions.yMax <= a.y) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(4.5, 6, 2)); }
+    if (a.speed >= 4.5 && a.speed <= 6) {
+      var propSpd = getMix(4.5, 6, a.speed);
+      var hexspd = (Math.round(mix(150, 255, propSpd))).toString(16);
       hexspd = hexspd.toUpperCase();
       var color = "#" + hexspd + hexspd + hexspd;
       ctx.fillStyle = color;
@@ -137,7 +144,8 @@ function tick() {
       setTimeout(tick, 1000 / 60);
     }
   } else {
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(0, 0, c.width, c.height);
+    c.style.display = "none";
+    document.getElementById('soil').style.backgroundColor = "#9e0000";
+    //document.getElementById('soil').style.background = "linear-gradient(to bottom, #000000 0%,#9e0000 100%)";
   }
 }

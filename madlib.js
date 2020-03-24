@@ -53,7 +53,7 @@ var rand = {
 var bubble = {
     data: [],
     settings: {
-        rangeEffectArea: 200,
+        rangeEffectArea: 100,
         generalBehavior: 0,
         generalRangeEffect: 0,
         restricted: false,
@@ -93,8 +93,8 @@ var bubble = {
         if (bubble.data[i].angle > pi) { bubble.data[i].angle -= 2 * pi; }
         if (bubble.data[i].angle < -pi) { bubble.data[i].angle += 2 * pi; }
         x = bubble.data[i].x; y = bubble.data[i].y;
-        x += Math.cos(mix(bubble.data[i].angle, cAngle, (1 / norme * bubble.settings.rangeEffectArea * .1) * rangeEffect)) * t * (bubble.data[i].speed + rangeEffect * (1 / ((1 / bubble.settings.rangeEffectArea) * norme + 1)));
-        y += Math.sin(mix(bubble.data[i].angle, cAngle, (1 / norme * bubble.settings.rangeEffectArea * .1) * rangeEffect)) * t * (bubble.data[i].speed + rangeEffect * (1 / ((1 / bubble.settings.rangeEffectArea) * norme + 1)));
+        x += Math.cos(mix(bubble.data[i].angle, cAngle, (1 / norme * bubble.settings.rangeEffectArea * .1) * rangeEffect)) * t * (bubble.data[i].speed + rangeEffect * (1 / ((1 / bubble.settings.rangeEffectArea) * norme**2 + 1)));
+        y += Math.sin(mix(bubble.data[i].angle, cAngle, (1 / norme * bubble.settings.rangeEffectArea * .1) * rangeEffect)) * t * (bubble.data[i].speed + rangeEffect * (1 / ((1 / bubble.settings.rangeEffectArea) * norme**2 + 1)));
         if (this.settings.restricted) {
             /*
             if (bubble.settings.restrictions.xMin >= x || bubble.settings.restrictions.xMax <= x) { bubble.data[i].angle = pi - bubble.data[i].angle; }
@@ -126,7 +126,7 @@ var cursor = {
     y: 1
 }
 var key = {
-    spd: 6.5,
+    spd: 5,
     enable: false,
     restrict: false,
     restrictions: function (x1, x2, y1, y2) {
@@ -171,10 +171,8 @@ function keymotion() {
             else if (key.border.yMax <= key.pos.y) { key.pos.y = key.border.yMax; }
         }
         post();
-    //setTimeout(keymotion, 1000 / 60);
     }
 }
-setTimeout(load, 1000 / 60);
 function load() { if (key.enable) { keymotion(); } }
 setKeyAct("ArrowUp", "function up() { key.pos.y -= key.spd; }")
 setKeyAct("ArrowDown", "function down() { key.pos.y += key.spd; }")
