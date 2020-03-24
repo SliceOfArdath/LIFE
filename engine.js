@@ -1,13 +1,13 @@
 var tickSpeed = 6; //in TPS
 var z = 0;
-var base=75;
-var coreBreath = 4+base; //in percent? per second
+var base = 75;
+var coreBreath = 4 + base; //in percent? per second
 var x = document.getElementById("core-m").style;
 //document.getElementById("behave").innerHTML = "Changer le comportement (Actuel: " + bubble.settings.generalBehavior + ")";
 //document.getElementById("range").innerHTML = "Changer l'effet de portée (Actuel: " + bubble.settings.generalRangeEffect + ")";
 //document.getElementById("pausemenu").style.display = "none";
 bubble.settings.generalRangeEffect = -1;
-bubble.settings.generalBehavior = 0; 
+bubble.settings.generalBehavior = 0;
 key.enable = true;
 var paused = false;
 /*function pause() {
@@ -47,43 +47,53 @@ function post() {
 var c = document.getElementById("game")
 function recalcPos() {
   c.width = document.documentElement.clientWidth;
-  c.height = document.documentElement.clientHeight/2;
+  c.height = document.documentElement.clientHeight / 2;
 
 }
 recalcPos()
 text.to = "document.getElementById('chat').innerHTML";
-var posInChat = 0
+var posInChat = 0;
 var chat = [
   "What is life?",
   "What meaning does it hide?",
   "This, this is what we all seek for.",
   "This is what makes us go along.",
   "This is...",
-  "Life."
+  "/Life."
 ]
 function effect() {
-  var audio = new Audio('typing1.mp3');
+  a = rand.int(1, 2);
+  eval("var audio = new Audio('typing" + a + ".mp3');");
   audio.play();
 }
 function next() {
-  text.startSay(chat[posInChat]);
-  posInChat++;
+  if (chat[posInChat].substr(0, 1) == "/") {
+    startGame();
+    text.startSay(chat[posInChat].substr(1, chat[posInChat].length - 1));
+    posInChat++;
+  } else {
+    text.startSay(chat[posInChat]);
+    posInChat++;
+  }
 }
-next();
+
 var ctx = c.getContext("2d");
+var timer = 1;
+var toc = false;
 ctx.fillStyle = "#FF5C79";
 ctx.fillRect(key.pos.x, key.pos.y, 6, 6);
 ctx.fillStyle = "#000000";
 ctx.fillRect(0, 0, c.width, c.height);
 console.log(c.width, c.height);
-for (let i = 0; i < 50; i++) {
-  bubble.create(rand.int(1, 100), rand.int(1, c.height), rand.real(3.5, 6.5, 2));
+function startGame() {
+  for (let i = 0; i < 20; i++) {
+    bubble.create(rand.int(1, 100), rand.int(1, c.height), rand.real(3.5, 6.5, 2));
+  }
+  key.pos.x = Math.round(c.width / 2);
+  key.restrictions(0, c.width - 7, 0, c.height - 7);
+  bubble.restrict(0, c.width + 30, -5, c.height);
+  tick()
 }
-key.pos.x = Math.round(c.width/2);
-key.restrictions(0, c.width-7, 0, c.height-7);
-bubble.restrict(0, c.width+30, -5, c.height);
-var timer = 1;
-var toc = false;
 function tick() {
   for (let i = 0; i < bubble.data.length; i++) {
     ctx.fillStyle = "#000000";
@@ -109,7 +119,7 @@ function tick() {
     if (a.x >= c.width) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(3.5, 6.5, 2)); }
     if (bubble.settings.restrictions.xMin >= a.x || bubble.settings.restrictions.xMax <= a.x) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(3.5, 6.5, 2)); }
     if (bubble.settings.restrictions.yMin >= a.y || bubble.settings.restrictions.yMax <= a.y) { bubble.edit(i, 0, rand.int(1, c.height), rand.real(3.5, 6.5, 2)); }
-    if (a.speed>=3.5 && a.speed<=6.5) {
+    if (a.speed >= 3.5 && a.speed <= 6.5) {
       var propSpd = getMix(3.5, 6.5, a.speed);
       var hexspd = (Math.round(mix(200, 255, propSpd))).toString(16);
       hexspd = hexspd.toUpperCase();
@@ -131,4 +141,3 @@ function tick() {
     ctx.fillRect(0, 0, c.width, c.height);
   }
 }
-tick()
