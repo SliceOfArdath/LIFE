@@ -111,6 +111,15 @@ var bubble = {
     },
     edit: function (i, x, y, speed = 5, rs = .1, angle = 0) { this.data[i] = { angle: angle, x: x, y: y, rspeed: rs, speed: speed }; }
 }
+var text = {
+    lps: 10,
+    to: "undefined",
+    letter: function (ltr) { eval(this.to + " += ltr;"); },
+    pointer: 0,
+    string: [],
+    startSay: function(str) { eval(this.to + " = '';"); this.pointer = 0; this.string = str.split(''); setTimeout(this.say, 1000/10); },
+    say: function () { if (text.string.length < text.pointer) { text.pointer++; text.letter(text.string[text.pointer]); setTimeout(this.say, 1000/10); } }
+}
 var cursor = {
     enable: false,
     x: 1,

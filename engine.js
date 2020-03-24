@@ -51,6 +51,17 @@ function recalcPos() {
 
 }
 recalcPos()
+text.to = "document.getElementById('chat').innerHTML";
+var posInChat = 0
+var chat = [
+  "What is life?",
+  "What meaning does it hide?"
+]
+function next() {
+  text.startSay(chat[posInChat]);
+  posInChat++;
+}
+next();
 var ctx = c.getContext("2d");
 ctx.fillStyle = "#FF5C79";
 ctx.fillRect(key.pos.x, key.pos.y, 6, 6);
